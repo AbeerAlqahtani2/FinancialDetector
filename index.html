@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الكاشف المالي الذكي — واجهة أولية (نسخة تعمل بلا إنترنت)</title>
+  <style>
+    :root{
+      --primary:#223a5e;     /* كحلي احترافي */
+      --primary-700:#1a2d49;
+      --bg:#f3f6fa;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:#e2e8f0;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Arabic, Arial, sans-serif; background:var(--bg); color:var(--text)}
+    a{color:inherit; text-decoration:none}
+    .container{max-width:900px; margin-inline:auto; padding:16px}
+    .header{position:sticky; top:0; z-index:20; background:#ffffffcc; backdrop-filter:blur(6px); border-bottom:1px solid var(--border)}
+    .header-wrap{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; max-width:900px; margin:auto}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{width:40px; height:40px; display:grid; place-content:center; background:var(--primary); color:white; border-radius:14px; font-weight:700}
+    .brand-title{font-weight:700}
+    .brand-sub{font-size:12px; color:#64748b}
+    .nav{display:none; gap:16px; font-size:14px; color:#334155}
+    @media(min-width:720px){ .nav{display:flex} }
+
+    .card{background:var(--card); border:1px solid var(--border); border-radius:18px; box-shadow:0 1px 2px rgba(0,0,0,.04)}
+    .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; border-radius:14px; padding:12px 16px; font-weight:600; cursor:pointer}
+    .btn-primary{background:var(--primary); color:white}
+    .btn-primary:hover{background:var(--primary-700)}
+    .btn-ghost{background:#fff; color:#0f172a; border:1px solid var(--border)}
+    .muted{color:#64748b}
+    .center{text-align:center}
+
+    .hero{margin-top:20px}
+    .hero .title{font-size:24px; font-weight:800; text-align:center; margin:0}
+    .hero .subtitle{font-size:14px; color:#475569; text-align:center; margin-top:6px}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:720px){ .grid-2{grid-template-columns:1fr 1fr} }
+
+    .upload-area{border:1px dashed var(--border); background:#f8fafc; padding:16px; border-radius:14px; text-align:center}
+    .badge{display:inline-flex; align-items:center; gap:6px; color:#64748b; font-size:12px}
+
+    .progress{background:#e2e8f0; border-radius:10px; padding:2px}
+    .progress-bar{height:10px; border-radius:8px; background:var(--primary); width:0%; transition:width .3s ease}
+
+    .tabs{position:sticky; top:56px; z-index:15; background:#ffffffdd; backdrop-filter:blur(6px); border:1px solid var(--border); border-radius:14px; padding:6px; display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px}
+    .tab{padding:10px 12px; border-radius:10px; font-weight:600; font-size:14px; border:1px solid transparent; text-align:center; cursor:pointer; color:#334155; background:transparent}
+    .tab.active{background:#f1f5f9; border-color:#e2e8f0}
+
+    .kpi{font-size:34px; font-weight:800}
+    .kpi.low{color:#059669} .kpi.med{color:#d97706} .kpi.high{color:#dc2626}
+    .chip{display:inline-flex; align-items:center; gap:6px; font-size:12px; padding:4px 10px; border-radius:999px; background:#f1f5f9; color:#334155}
+
+    /* بسيط وفعّال: رسم الأعمدة بدون مكتبات */
+    .bars{display:flex; gap:10px; align-items:flex-end; height:260px; padding:10px; background:#fff; border:1px solid var(--border); border-radius:14px}
+    .bar{flex:1; display:flex; flex-direction:column; gap:8px; align-items:center}
+    .bar .rect{width:100%; border-radius:10px 10px 6px 6px; background:linear-gradient(180deg, var(--primary), #415a77)}
+    .bar .label{font-size:12px; color:#334155; text-align:center}
+
+    footer{margin-top:8px; padding:12px; font-size:11px; color:#94a3b8; text-align:center}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-wrap">
+      <div class="brand">
+        <div class="logo">FD</div>
+        <div>
+          <div class="brand-title">الكاشف المالي الذكي</div>
+          <div class="brand-sub">واجهة أولية — ملف واحد بلا إنترنت</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#hero">الواجهة</a>
+        <a href="#results">النتائج</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="hero" class="hero card" style="padding:20px 16px;">
+      <h1 class="title">ابدئي بتحليل قوائمك المالية</h1>
+      <p class="subtitle">ارفعي ملف القوائم، اختاري نوع القائمة، ثم ابدئي التحليل. النتائج ستظهر في تبويبات بأسفل الصفحة.</p>
+
+      <div class="grid grid-2" style="margin-top:16px">
+        <div class="card" style="padding:14px">
+          <div class="muted" style="font-weight:600; font-size:13px; margin-bottom:8px">رفع القوائم المالية</div>
+          <div class="upload-area">
+            <input id="fileInput" type="file" accept=".pdf,.xlsx,.xls,.csv" class="hidden" style="display:none">
+            <button id="pickBtn" class="btn btn-ghost" style="width:100%; max-width:320px">اختر ملفاً (PDF/Excel)</button>
+            <div id="fileName" class="muted" style="margin-top:8px; font-size:12px">لا يوجد ملف مرفوع بعد</div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:14px">
+          <div class="muted" style="font-weight:600; font-size:13px; margin-bottom:8px">نوع القائمة المالية</div>
+          <select id="statement" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:#fff; font-size:14px">
+            <option value="income">قائمة الدخل</option>
+            <option value="balance">قائمة المركز المالي</option>
+            <option value="cashflow">قائمة التدفقات النقدية</option>
+          </select>
+          <div class="muted" style="font-size:12px; margin-top:8px">تم ضبط التحليل الافتراضي لاكتشاف الأنماط الشاذة.</div>
+        </div>
+
+        <div class="card" style="padding:14px; grid-column:1/-1">
+          <button id="analyzeBtn" class="btn btn-primary" style="width:100%">بدء التحليل</button>
+          <div id="progressWrap" style="margin-top:10px; display:none">
+            <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+            <div class="muted" style="font-size:12px; margin-top:6px">جارِ استخراج المؤشرات وتحليل الأنماط الشاذة…</div>
+          </div>
+          <div class="center" style="margin-top:10px">
+            <span class="badge"><span id="fileBadge">—</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABS -->
+    <section id="results" class="container" style="padding:0; margin-top:16px; display:none">
+      <div class="tabs">
+        <button class="tab active" data-tab="summary">الملخص</button>
+        <button class="tab" data-tab="factors">العوامل</button>
+        <button class="tab" data-tab="recs">التوصيات</button>
+        <button class="tab" data-tab="export">تصدير</button>
+      </div>
+
+      <div id="panel-summary" class="card" style="padding:16px">
+        <div class="grid grid-2">
+          <div class="card" style="padding:16px">
+            <div class="muted" style="font-size:14px">مؤشر الاشتباه الإجمالي</div>
+            <div id="score" class="kpi low">0%</div>
+            <div id="badge" class="chip">الحالة: —</div>
+          </div>
+          <div class="card" style="padding:16px">
+            <div class="muted" style="font-size:14px">ملخص سريع</div>
+            <ul id="summary" style="margin-top:8px; padding-right:18px; line-height:1.8; font-size:14px"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-factors" class="card" style="padding:16px; display:none">
+        <div class="muted" style="font-weight:700; font-size:14px; margin-bottom:8px">أهم العوامل المؤثرة في درجة الاشتباه</div>
+        <div class="bars" id="bars"></div>
+      </div>
+
+      <div id="panel-recs" class="card" style="padding:16px; display:none">
+        <div class="muted" style="font-weight:700; font-size:14px; margin-bottom:8px">توصيات مهنية أولية</div>
+        <ul id="recs" style="margin-top:8px; padding-right:18px; line-height:1.8; font-size:14px"></ul>
+        <div class="muted" style="font-size:12px; margin-top:10px">* التوصيات مبنية على نموذج أولي — يلزم التدقيق اليدوي قبل اتخاذ أي قرار.</div>
+      </div>
+
+      <div id="panel-export" class="card" style="padding:16px; display:none">
+        <div class="grid" style="grid-template-columns:1fr auto; align-items:center">
+          <div class="muted" style="font-size:13px">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:4px">تصدير تقرير مبدئي</div>
+            تنزيل ملف JSON يحتوي على الملخص والعوامل والتوصيات.
+          </div>
+          <button id="downloadBtn" class="btn btn-primary">تنزيل التقرير</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <!-- لا توجد جملة إضافية هنا — حسب رغبتك -->
+  </footer>
+
+  <script>
+    const pickBtn = document.getElementById('pickBtn');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const fileBadge = document.getElementById('fileBadge');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressBar = document.getElementById('progressBar');
+    const results = document.getElementById('results');
+    const scoreEl = document.getElementById('score');
+    const badgeEl = document.getElementById('badge');
+    const summaryEl = document.getElementById('summary');
+    const recsEl = document.getElementById('recs');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    const tabs = document.querySelectorAll('.tab');
+    const panels = {
+      summary: document.getElementById('panel-summary'),
+      factors: document.getElementById('panel-factors'),
+      recs: document.getElementById('panel-recs'),
+      export: document.getElementById('panel-export'),
+    };
+    function activateTab(name){
+      Object.keys(panels).forEach(k => panels[k].style.display = (k===name) ? '' : 'none');
+      tabs.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === name));
+    }
+    tabs.forEach(btn => btn.addEventListener('click', ()=> activateTab(btn.dataset.tab)) );
+
+    pickBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      const f = fileInput.files?.[0];
+      fileName.textContent = f ? `تم اختيار: ${f.name}` : 'لا يوجد ملف مرفوع بعد';
+      fileBadge.textContent = f ? f.name : '—';
+    });
+
+    analyzeBtn.addEventListener('click', () => {
+      if(!fileInput.files || !fileInput.files[0]) return;
+      results.style.display='none';
+      activateTab('summary');
+      progressWrap.style.display='block';
+      progressBar.style.width = '0%';
+      let value = 0;
+      const id = setInterval(() => {
+        value = Math.min(100, value + Math.random()*18);
+        progressBar.style.width = value + '%';
+        if(value >= 100){
+          clearInterval(id);
+          setTimeout(()=>{
+            progressWrap.style.display='none';
+            const res = generateFake(document.getElementById('statement').value);
+            renderResult(res, fileInput.files[0].name);
+            results.style.display='block';
+            document.getElementById('results').scrollIntoView({ behavior:'smooth', block:'start' });
+          }, 280);
+        }
+      }, 450);
+    });
+
+    function renderResult(res, srcName){
+      scoreEl.textContent = res.score + '%';
+      scoreEl.classList.remove('low','med','high');
+      if(res.score >= 80){ scoreEl.classList.add('high'); badgeEl.textContent='الحالة: مرتفع'; }
+      else if(res.score >= 60){ scoreEl.classList.add('med'); badgeEl.textContent='الحالة: متوسط'; }
+      else{ scoreEl.classList.add('low'); badgeEl.textContent='الحالة: منخفض'; }
+
+      summaryEl.innerHTML='';
+      res.summary.forEach(s => { const li=document.createElement('li'); li.textContent=s; summaryEl.appendChild(li); });
+
+      recsEl.innerHTML='';
+      res.recommendations.forEach(r => { const li=document.createElement('li'); li.textContent=r; recsEl.appendChild(li); });
+
+      // Bars (no libraries)
+      const bars = document.getElementById('bars');
+      bars.innerHTML='';
+      res.factors.forEach(f => {
+        const wrap = document.createElement('div');
+        wrap.className='bar';
+        const rect = document.createElement('div');
+        rect.className='rect';
+        rect.style.height = Math.max(6, f.weight*2) + 'px'; // scale
+        const label = document.createElement('div');
+        label.className='label';
+        label.textContent = f.label;
+        wrap.appendChild(rect);
+        wrap.appendChild(label);
+        bars.appendChild(wrap);
+      });
+
+      downloadBtn.onclick = ()=>{
+        const report = { meta:{ generatedAt:new Date().toISOString(), source:srcName }, score:res.score, summary:res.summary, factors:res.factors, recommendations:res.recommendations };
+        const blob = new Blob([JSON.stringify(report,null,2)], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download='smart-financial-detector-report.json'; a.click();
+        URL.revokeObjectURL(url);
+      };
+    }
+
+    function generateFake(type){
+      const base = type==='income'?68:(type==='balance'?57:49);
+      const jitter = Math.round(Math.random()*26 - 13);
+      const score = Math.max(12, Math.min(96, base + jitter));
+      const pool=[
+        {label:'تذبذب غير اعتيادي في هامش الربح', weight:rand(55,92)},
+        {label:'قفزات في الإيراد دون دعم تشغيلي', weight:rand(40,85)},
+        {label:'تغيّر سياسات الاعتراف بالإيراد', weight:rand(30,74)},
+        {label:'توسع الذمم المدينة/أيام التحصيل', weight:rand(25,70)},
+        {label:'ملاحظات سردية بلغة إيجابية مفرطة', weight:rand(20,65)},
+      ].sort((a,b)=>b.weight-a.weight).slice(0,4);
+
+      const summary=[
+        `درجة الاشتباه الإجمالية: ${score}% بناءً على أنماط الشذوذ.`,
+        `أبرز العوامل: ${pool.slice(0,2).map(f=>f.label).join('، ')}.`,
+        `لم تُكتشف دلائل قاطعة، لكنها مؤشرات تستلزم إجراءات تحقق إضافية.`,
+      ];
+      const recommendations=[
+        'تنفيذ اختبارات جوهرية موجّهة على البنود مرتفعة المخاطرة.',
+        'مطابقة أرصدة العملاء وأعمار الذمم ومراجعة عقود الاعتراف بالإيراد.',
+        'إجراء تحليل اتجاهي وسلاسل زمنية لآخر 12 ربعاً.',
+        'مراجعة الإفصاحات السردية والتحقق من الاتساق مع الأداء الفعلي.',
+      ];
+      return { score, summary, factors:pool, recommendations };
+    }
+    function rand(min,max){ return Math.round(min + Math.random()*(max-min)); }
+  </script>
+</body>
+</html>
